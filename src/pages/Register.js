@@ -1,36 +1,43 @@
 import React from "react";
 import "../assets/App.css";
-import {Formik, Form, Field, ErrorMessage} from "formik";
+import {Formik, Form , Field, ErrorMessage} from "formik";
+import axios from "axios";
 import * as Yup from 'yup';
 
-function Register() {
 
+
+function Register() {
     const initialValues = {
         username:"",
         password:"",
     };
 
     const validationsSchema = Yup.object().shape({
-        username: Yup.string().required(),
+        username: Yup.string().required("Requiere usuario"),
         password: Yup.string().min(8).max(15).required(),
     });
 
     const onSubmit = (data) => {
-        console.log(data);
+            axios.post("http://localhost:3001/api/user/register", data).then((res) =>{
+            console.log("Funciona");
+        });
     };
 
     return (
       <div className="register">
-        <Formik initialValues={initialValues} onSubmit={onSubmit} validationsSchema={validationsSchema}>
-            <form className = "formContainer">
+        <Formik initialValues={initialValues} 
+            onSubmit={onSubmit} 
+            validationsSchema={validationsSchema}>
+            
+            <Form className = "formContainer">
                 <label>Username</label>
-                    <ErrorMessage name="username" element = "span" />
+                    <ErrorMessage name="username" element= "span" />
                 <Field 
                     autoComplete="off"
                     id="inputRegister" 
                     name="username" 
                     type="text"
-                    placeholder="Name" 
+                    placeholder="Name"  
                 />
                 
                 <label>Password</label>
@@ -44,7 +51,7 @@ function Register() {
                 />
 
                 <button type="submit" >Register</button>
-            </form>
+            </Form>
         </Formik>
       </div>
     )
